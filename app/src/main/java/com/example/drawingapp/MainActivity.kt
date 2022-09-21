@@ -1,5 +1,7 @@
 package com.example.drawingapp
 
+import android.Manifest
+import android.app.AlertDialog
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,8 +9,12 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,6 +30,23 @@ class MainActivity : AppCompatActivity() {
     private var ibColorPurple: ImageButton? = null
     private var ibColorTeal: ImageButton? = null
     private var ibColorWhite: ImageButton? = null
+    private var ibGallery: ImageButton? = null
+
+    val requestPermission: ActivityResultLauncher<Array<String>> =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            permissions.entries.forEach {
+                val permissionName = it.key
+                val isGranted = it.value
+
+                if (isGranted) {
+                    Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show()
+                } else {
+                    if (permissionName == Manifest.permission.READ_EXTERNAL_STORAGE) {
+                        Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +81,7 @@ class MainActivity : AppCompatActivity() {
         ibColorPurple = findViewById(R.id.ib_activity_main_color_purple)
         ibColorTeal = findViewById(R.id.ib_activity_main_color_teal)
         ibColorWhite = findViewById(R.id.ib_activity_main_color_white)
+        ibGallery = findViewById(R.id.ib_activity_main_pick_image)
     }
 
     private fun setOnClick() {
@@ -87,6 +111,9 @@ class MainActivity : AppCompatActivity() {
         }
         ibColorWhite?.setOnClickListener {
             paintClicked(ibColorWhite!!)
+        }
+        ibGallery?.setOnClickListener {
+            requestStoragePermission()
         }
     }
 
@@ -131,6 +158,31 @@ class MainActivity : AppCompatActivity() {
             )
 
             mIbCurrentColor = imageButton
+        }
+    }
+
+    private fun showRationaleDialog(title: String, message: String) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("Cancel") { dialog, _ -> dialog.dismiss() }
+        builder.create().show()
+    }
+
+    private fun requestStoragePermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+        ) {
+            showRationaleDialog(
+                "Drawing App",
+                "Drawing App needs to access your external storage"
+            )
+
+        } else {
+            requestPermission.launch(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE))
+            // TODO - add writing external storage permission
         }
     }
 }
