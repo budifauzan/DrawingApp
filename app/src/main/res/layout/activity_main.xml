@@ -21,7 +21,7 @@
             android:id="@+id/iv_activity_main_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop" />
 
         <com.example.drawingapp.DrawingView
             android:id="@+id/dv_activity_main_canvas"
@@ -40,6 +40,17 @@
         android:src="@drawable/ic_brush"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ib_activity_main_undo" />
+
+    <ImageButton
+        android:id="@+id/ib_activity_main_undo"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="4dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_undo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/ib_activity_main_brush_size"
         app:layout_constraintStart_toEndOf="@id/ib_activity_main_pick_image" />
 
     <ImageButton
@@ -50,7 +61,7 @@
         android:scaleType="fitXY"
         android:src="@drawable/ic_gallery"
         app:layout_constraintBottom_toBottomOf="@id/ib_activity_main_brush_size"
-        app:layout_constraintEnd_toStartOf="@id/ib_activity_main_brush_size"
+        app:layout_constraintEnd_toStartOf="@id/ib_activity_main_undo"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/ib_activity_main_brush_size" />

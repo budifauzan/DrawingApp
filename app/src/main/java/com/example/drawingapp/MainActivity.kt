@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     private var ibColorTeal: ImageButton? = null
     private var ibColorWhite: ImageButton? = null
     private var ibGallery: ImageButton? = null
+    private var ibUndo: ImageButton? = null
 
     val openGalleryLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -95,6 +96,7 @@ class MainActivity : AppCompatActivity() {
         ibColorTeal = findViewById(R.id.ib_activity_main_color_teal)
         ibColorWhite = findViewById(R.id.ib_activity_main_color_white)
         ibGallery = findViewById(R.id.ib_activity_main_pick_image)
+        ibUndo = findViewById(R.id.ib_activity_main_undo)
     }
 
     private fun setOnClick() {
@@ -127,6 +129,9 @@ class MainActivity : AppCompatActivity() {
         }
         ibGallery?.setOnClickListener {
             requestStoragePermission()
+        }
+        ibUndo?.setOnClickListener{
+            drawingView?.undo()
         }
     }
 
