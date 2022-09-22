@@ -3,10 +3,13 @@ package com.example.drawingapp
 import android.Manifest
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -32,6 +35,14 @@ class MainActivity : AppCompatActivity() {
     private var ibColorWhite: ImageButton? = null
     private var ibGallery: ImageButton? = null
 
+    val openGalleryLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK && result.data != null) {
+                val imgBackground: ImageView = findViewById(R.id.iv_activity_main_background)
+                imgBackground.setImageURI(result.data?.data)
+            }
+        }
+
     val requestPermission: ActivityResultLauncher<Array<String>> =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             permissions.entries.forEach {
@@ -39,7 +50,9 @@ class MainActivity : AppCompatActivity() {
                 val isGranted = it.value
 
                 if (isGranted) {
-                    Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show()
+                    val intent =
+                        Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                    openGalleryLauncher.launch(intent)
                 } else {
                     if (permissionName == Manifest.permission.READ_EXTERNAL_STORAGE) {
                         Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
