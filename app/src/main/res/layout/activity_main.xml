@@ -39,8 +39,19 @@
         android:scaleType="fitXY"
         android:src="@drawable/ic_brush"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/ib_activity_main_save"
         app:layout_constraintStart_toEndOf="@id/ib_activity_main_undo" />
+
+    <ImageButton
+        android:id="@+id/ib_activity_main_save"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="4dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ib_activity_main_brush_size" />
 
     <ImageButton
         android:id="@+id/ib_activity_main_undo"
